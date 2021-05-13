@@ -1,8 +1,21 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-{ config, pkgs, ... }:
-
+{ config, pkgs, lib, ... }:
+let
+  master = import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/master.tar.gz") {};
+  # installs a vim plugin from git with a given tag / branch
+  pluginGit = ref: repo: pkgs.vimUtils.buildVimPluginFrom2Nix {
+    pname = "${lib.strings.sanitizeDerivationName repo}";
+    version = ref;
+    src = builtins.fetchGit {
+      url = "https://github.com/${repo}.git";
+      ref = ref;
+    };
+  };
+  # always installs latest version
+  plugin = pluginGit "HEAD";
+in 
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -43,6 +56,10 @@
     font = "Lat2-Terminus16";
     keyMap = "us";
   };
+
+  fonts.fonts = with pkgs; [
+    (nerdfonts.override { fonts = [ "FiraCode" ]; })
+  ];
 
   # Enable the X11 windowing system.
   services.xserver = {
@@ -88,19 +105,55 @@
     shell = pkgs.zsh;
   };
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.akash = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-  };
-
   home-manager.users.akash = {
     programs.git = {
       enable = true;
       userName = "JavaLich";
       userEmail = "amelachuri@gmail.com";
     };
+    programs.neovim = {
+      enable = true;
+      package = pkgs.neovim-nightly;
+      extraConfig = builtins.readFile ./nvim/init.vim + builtins.readFile ./nvim/mountain.vim;
+      plugins = with pkgs.vimPlugins; [
+        lualine-nvim
+	vimwiki
+	vim-floaterm
+	vimtex
+	vim-startify
+	nerdtree
+	auto-pairs
+	vim-visual-multi
+	vim-clang-format
+	nvim-treesitter
+	nvim-lspconfig
+	completion-nvim
+	(plugin "folke/lsp-colors.nvim")
+	(plugin "nvim-lua/popup.nvim")
+	(plugin "nvim-lua/plenary.nvim")
+	(plugin "nvim-telescope/telescope.nvim")
+        (plugin "ghifarit53/tokyonight-vim")
+      ];
+      extraPackages = with pkgs; [
+        zathura
+	ccls
+        rust-analyzer
+      ];
+      viAlias = true;
+      vimAlias = true;
+      vimdiffAlias = true;
+      withPython3 = true;
+    };
   };
+
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.users.akash = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+  };
+
+
+  
 
   #List packages installed in system profile. To search, run:
   #$ nix search wget
@@ -130,7 +183,7 @@
   };
 
   environment.systemPackages = with pkgs; [
-    wget git tmux
+    wget git tmux gcc
     neovim
     dmenu
     ranger

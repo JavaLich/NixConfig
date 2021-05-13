@@ -1,0 +1,12 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =5
+let g:netrw_dirhist_5='/home/akash/Dropbox/CS180/Project-5/General/src'
+let g:netrw_dirhist_4='/home/akash/.config'
+let g:netrw_dirhist_3='/home/akash/.config/nvim'
+let g:netrw_dirhist_2='/home/akash/.config'
+let g:netrw_dirhist_1='/home/akash'
+let g:netrw_dirhist_0='/home'
+let g:netrw_dirhist_9='/home/akash'
+let g:netrw_dirhist_8='/home/akash/Development/C/text_editor'
+let g:netrw_dirhist_7='/home/akash/Development/C'
+let g:netrw_dirhist_6='/home/akash/Development'
