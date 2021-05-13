@@ -43,10 +43,21 @@
     keyMap = "us";
   };
   # Enable the X11 windowing system.
-  services.xserver.enable = true;
-  services.xserver.windowManager.dwm.enable = true;
-  services.xserver.desktopManager.xfce.enable = true;
-  
+  services.xserver = {
+    enable = true;
+    windowManager.dwm.enable = true;
+
+    displayManager.sessionCommands = ''
+      feh --no-fehbg --bg-scale /etc/nixos/coast.png
+    '';
+
+    displayManager.lightdm.enable = true;
+    displayManager.lightdm.greeters.mini = {
+      enable = true;
+      user = "akash";
+    };
+  };
+
   # Configure keymap in X11
   services.xserver.layout = "us";
   # services.xserver.xkbOptions = "eurosign:e";
@@ -67,6 +78,9 @@
     plugins = [ "git" "sudo" ];
     theme = "nicoulaj";
   };
+  programs.zsh.shellInit = ''
+    ${pkgs.disfetch}/bin/disfetch
+  '';
 
   users.extraUsers.akash = {
     shell = pkgs.zsh;
@@ -91,6 +105,8 @@
     ranger
     qutebrowser 
     discord
+    disfetch
+    feh
 
   (st.overrideAttrs (oldAttrs: rec {
     # ligatures dependency
@@ -109,6 +125,7 @@
   export VISUAL=nvim
   export BROWSER=qutebrowser
   '';
+
 
   nixpkgs.overlays = [
   (self: super: {

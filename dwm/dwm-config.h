@@ -1,7 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 1;        /* border pixel of windows */
+static const unsigned int borderpx  = 3;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const unsigned int gappih    = 10;       /* horiz inner gap between windows */
 static const unsigned int gappiv    = 10;       /* vert inner gap between windows */
@@ -12,15 +12,15 @@ static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = { "monospace:size=10" };
 static const char dmenufont[]       = "monospace:size=10";
-static const char col_gray1[]       = "#222222";
-static const char col_gray2[]       = "#444444";
-static const char col_gray3[]       = "#bbbbbb";
-static const char col_gray4[]       = "#eeeeee";
-static const char col_cyan[]        = "#005577";
-static const char *colors[][3]      = {
+static const char col_1[]  = "#181c24"; /* background color of bar */
+static const char col_2[]  = "#181c24"; /* border color unfocused windows */
+static const char col_3[]  = "#d7d7d7";
+static const char col_4[]  = "#5E8485"; /* border color focused windows and tags */
+
+static const char *colors[][3]        = {
 	/*               fg         bg         border   */
-	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+	[SchemeNorm] = { col_3, col_1, col_2 },
+	[SchemeSel]  = { col_3, col_4, col_4 },
 };
 
 /* tagging */
@@ -62,7 +62,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_1, "-nf", col_3, "-sb", col_4, "-sf", col_2, NULL };
 static const char *termcmd[]  = { "st", NULL };
 static const char *browsercmd[] = { "qutebrowser", NULL };
 
