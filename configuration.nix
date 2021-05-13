@@ -7,6 +7,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      (import "${builtins.fetchTarball https://github.com/rycee/home-manager/archive/master.tar.gz}/nixos")
     ];
 
   # Use the GRUB 2 boot loader.
@@ -42,6 +43,7 @@
     font = "Lat2-Terminus16";
     keyMap = "us";
   };
+
   # Enable the X11 windowing system.
   services.xserver = {
     enable = true;
@@ -92,10 +94,39 @@
     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
   };
 
+  home-manager.users.akash = {
+    programs.git = {
+      enable = true;
+      userName = "JavaLich";
+      userEmail = "amelachuri@gmail.com";
+    };
+  };
+
   #List packages installed in system profile. To search, run:
   #$ nix search wget
-  nixpkgs.config = {
-    allowUnfree = true;
+  nixpkgs = {
+    overlays = 
+      [
+        (import (builtins.fetchTarball {
+          url = https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz;
+        }))
+
+	(self: super: {
+    	  dwm = super.dwm.overrideAttrs (oldAttrs: rec {
+          patches = oldAttrs.patches ++ [
+            ./dwm/patches/dwm-vanitygaps-6.2.diff
+            ./dwm/patches/dwm-centeredmaster-6.1.diff
+          ];
+            configFile = super.writeText "config.h" (builtins.readFile ./dwm/dwm-config.h);
+            postPatch = 
+	      oldAttrs.postPatch or "" + "\necho 'Using own config file...'\n cp ${configFile} config.def.h";
+          });
+        })
+      ];
+
+    config = {
+      allowUnfree = true;
+    };
   };
 
   environment.systemPackages = with pkgs; [
@@ -108,16 +139,16 @@
     disfetch
     feh
 
-  (st.overrideAttrs (oldAttrs: rec {
-    # ligatures dependency
-    buildInputs = oldAttrs.buildInputs ++ [ harfbuzz ];
-    patches = [
-    ];
-    # version controlled config file
-    configFile = writeText "config.def.h" (builtins.readFile ./st/st-config.h);
-    postPatch = "${oldAttrs.postPatch}\n cp ${configFile} config.def.h";
-  }))
-];
+    (st.overrideAttrs (oldAttrs: rec {
+      # ligatures dependency
+      buildInputs = oldAttrs.buildInputs ++ [ harfbuzz ];
+      patches = [
+      ];
+      # version controlled config file
+      configFile = writeText "config.def.h" (builtins.readFile ./st/st-config.h);
+      postPatch = "${oldAttrs.postPatch}\n cp ${configFile} config.def.h";
+    }))
+  ];
 
   environment.interactiveShellInit = ''
   export XDG_CONFIG_HOME="$HOME/.config"
@@ -125,20 +156,6 @@
   export VISUAL=nvim
   export BROWSER=qutebrowser
   '';
-
-
-  nixpkgs.overlays = [
-  (self: super: {
-    dwm = super.dwm.overrideAttrs (oldAttrs: rec {
-      patches = oldAttrs.patches ++ [
-      ./dwm/patches/dwm-vanitygaps-6.2.diff
-      ./dwm/patches/dwm-centeredmaster-6.1.diff
-        ];
-      configFile = super.writeText "config.h" (builtins.readFile ./dwm/dwm-config.h);
-      postPatch = oldAttrs.postPatch or "" + "\necho 'Using own config file...'\n cp ${configFile} config.def.h";
-      });
-    })
-  ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
