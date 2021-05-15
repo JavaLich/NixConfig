@@ -75,6 +75,8 @@ in
       enable = true;
       user = "akash";
     };
+
+    videoDrivers = [ "nvidia" ];
   };
 
   # Configure keymap in X11
@@ -97,7 +99,7 @@ in
     plugins = [ "git" "sudo" ];
     theme = "nicoulaj";
   };
-  programs.zsh.shellInit = ''
+  programs.zsh.interactiveShellInit = ''
     ${pkgs.disfetch}/bin/disfetch
   '';
 
@@ -132,12 +134,8 @@ in
 	(plugin "nvim-lua/popup.nvim")
 	(plugin "nvim-lua/plenary.nvim")
 	(plugin "nvim-telescope/telescope.nvim")
-        (plugin "ghifarit53/tokyonight-vim")
       ];
       extraPackages = with pkgs; [
-        zathura
-	ccls
-        rust-analyzer
       ];
       viAlias = true;
       vimAlias = true;
@@ -151,8 +149,6 @@ in
     isNormalUser = true;
     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
   };
-
-
   
 
   #List packages installed in system profile. To search, run:
@@ -181,9 +177,15 @@ in
       allowUnfree = true;
     };
   };
+:
+  hardware.opengl.enable = true;
+  hardware.pulseaudio.support32Bit = true;
+  hardware.opengl.extraPackages = with pkgs; [
+    linuxPackages.nvidia_x11
+  ];
 
   environment.systemPackages = with pkgs; [
-    wget git tmux gcc
+    wget git tmux 
     neovim
     dmenu
     ranger
@@ -191,6 +193,8 @@ in
     discord
     disfetch
     feh
+    zathura
+    gcc rustup rust-analyzer ccls
 
     (st.overrideAttrs (oldAttrs: rec {
       # ligatures dependency
@@ -204,10 +208,10 @@ in
   ];
 
   environment.interactiveShellInit = ''
-  export XDG_CONFIG_HOME="$HOME/.config"
-  export EDITOR=nvim
-  export VISUAL=nvim
-  export BROWSER=qutebrowser
+    export XDG_CONFIG_HOME="$HOME/.config"
+    export EDITOR=nvim
+    export VISUAL=nvim
+    export BROWSER=qutebrowser
   '';
 
   # Some programs need SUID wrappers, can be configured further or are
