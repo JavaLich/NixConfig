@@ -10,8 +10,8 @@ static const unsigned int gappov    = 10;       /* vert outer gap between window
 static const int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "monospace:size=10" };
-static const char dmenufont[]       = "monospace:size=10";
+static const char *fonts[]          = { "FiraCode Nerd Font Mono:size=10" };
+static const char dmenufont[]       = "FiraCode Nerd Font Mono:size=10";
 static const char col_1[]  = "#181c24"; /* background color of bar */
 static const char col_2[]  = "#181c24"; /* border color unfocused windows */
 static const char col_3[]  = "#d7d7d7";

@@ -61,6 +61,11 @@ in
     (nerdfonts.override { fonts = [ "FiraCode" ]; })
   ];
 
+  services.dwm-status = {
+    enable = true;
+    order = [ "audio" "cpu_load" "network" "time" ];
+  };
+
   # Enable the X11 windowing system.
   services.xserver = {
     enable = true;
@@ -130,6 +135,7 @@ in
 	nvim-treesitter
 	nvim-lspconfig
 	completion-nvim
+	vim-glsl
 	(plugin "folke/lsp-colors.nvim")
 	(plugin "nvim-lua/popup.nvim")
 	(plugin "nvim-lua/plenary.nvim")
@@ -177,7 +183,7 @@ in
       allowUnfree = true;
     };
   };
-:
+
   hardware.opengl.enable = true;
   hardware.pulseaudio.support32Bit = true;
   hardware.opengl.extraPackages = with pkgs; [

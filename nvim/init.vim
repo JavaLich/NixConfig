@@ -33,7 +33,7 @@ set termguicolors
 
 syntax enable
 
-lua require('lualine').setup{ options = { theme = 'iceberg_dark' } }
+lua require('lualine').setup{ options = { theme = 'ayu_mirage' } }
 
 " Requires xclip and Linux to work
 set clipboard+=unnamedplus
