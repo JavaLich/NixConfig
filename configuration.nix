@@ -63,7 +63,14 @@ in
 
   services.dwm-status = {
     enable = true;
-    order = [ "audio" "cpu_load" "network" "time" ];
+    order = [ "audio" "cpu_load" "time" ];
+    extraConfig = ''
+      separator = "    "
+      [audio]
+      mute = "ﱝ"
+      template = "{ICO} {VOL}%"
+      icons = ["奄", "奔", "墳"]
+    '';
   };
 
   # Enable the X11 windowing system.
@@ -72,7 +79,7 @@ in
     windowManager.dwm.enable = true;
 
     displayManager.sessionCommands = ''
-      feh --no-fehbg --bg-scale /etc/nixos/coast.png
+      feh --no-fehbg --bg-scale /etc/nixos/mountain.jpg
     '';
 
     displayManager.lightdm.enable = true;
@@ -112,7 +119,7 @@ in
     shell = pkgs.zsh;
   };
 
-  home-manager.users.akash = {
+  home-manager.users.root = {
     programs.git = {
       enable = true;
       userName = "JavaLich";
@@ -124,22 +131,22 @@ in
       extraConfig = builtins.readFile ./nvim/init.vim + builtins.readFile ./nvim/mountain.vim;
       plugins = with pkgs.vimPlugins; [
         lualine-nvim
-	vimwiki
-	vim-floaterm
-	vimtex
-	vim-startify
-	nerdtree
-	auto-pairs
-	vim-visual-multi
-	vim-clang-format
-	nvim-treesitter
-	nvim-lspconfig
-	completion-nvim
-	vim-glsl
-	(plugin "folke/lsp-colors.nvim")
-	(plugin "nvim-lua/popup.nvim")
-	(plugin "nvim-lua/plenary.nvim")
-	(plugin "nvim-telescope/telescope.nvim")
+	    vimwiki
+	    vim-floaterm
+        vim-startify
+	    vimtex
+	    nerdtree
+	    auto-pairs
+	    vim-visual-multi
+	    vim-clang-format
+	    nvim-treesitter
+	    nvim-lspconfig
+	    completion-nvim
+	    vim-glsl
+	    (plugin "folke/lsp-colors.nvim")
+	    (plugin "nvim-lua/popup.nvim")
+	    (plugin "nvim-lua/plenary.nvim")
+	    (plugin "nvim-telescope/telescope.nvim")
       ];
       extraPackages = with pkgs; [
       ];
@@ -195,7 +202,8 @@ in
     neovim
     dmenu
     ranger
-    qutebrowser 
+    qutebrowser python39Packages.adblock
+    firefox
     discord
     disfetch
     feh
