@@ -79,7 +79,7 @@ in
     windowManager.dwm.enable = true;
 
     displayManager.sessionCommands = ''
-      feh --no-fehbg --bg-scale /etc/nixos/mountain.jpg
+      feh --no-fehbg --bg-scale /etc/nixos/coast.png
     '';
 
     displayManager.lightdm.enable = true;
@@ -119,7 +119,7 @@ in
     shell = pkgs.zsh;
   };
 
-  home-manager.users.root = {
+  home-manager.users.akash = {
     programs.git = {
       enable = true;
       userName = "JavaLich";
@@ -130,7 +130,6 @@ in
       package = pkgs.neovim-nightly;
       extraConfig = builtins.readFile ./nvim/init.vim + builtins.readFile ./nvim/mountain.vim;
       plugins = with pkgs.vimPlugins; [
-        lualine-nvim
 	    vimwiki
 	    vim-floaterm
         vim-startify
@@ -143,6 +142,7 @@ in
 	    nvim-lspconfig
 	    completion-nvim
 	    vim-glsl
+        (plugin "ryanoasis/vim-devicons")
 	    (plugin "folke/lsp-colors.nvim")
 	    (plugin "nvim-lua/popup.nvim")
 	    (plugin "nvim-lua/plenary.nvim")
@@ -204,6 +204,7 @@ in
     ranger
     qutebrowser python39Packages.adblock
     firefox
+    spotify
     discord
     disfetch
     feh
