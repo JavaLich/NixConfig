@@ -155,7 +155,12 @@ in
       vimdiffAlias = true;
       withPython3 = true;
     };
+
+    xdg.configFile."qutebrowser/config.py".source = ./qutebrowser/config.py;
+    xdg.configFile."qutebrowser/mountain/draw.py".source = ./qutebrowser/mountain/draw.py;
   };
+
+
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.akash = {
