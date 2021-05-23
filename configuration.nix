@@ -183,6 +183,7 @@ in
           patches = oldAttrs.patches ++ [
             ./dwm/patches/dwm-vanitygaps-6.2.diff
             ./dwm/patches/dwm-centeredmaster-6.1.diff
+            ./dwm/patches/dwm-focusonclick.diff
           ];
             configFile = super.writeText "config.h" (builtins.readFile ./dwm/dwm-config.h);
             postPatch = 
